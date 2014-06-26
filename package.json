@@ -1,0 +1,30 @@
+{
+  "name": "maxLength",
+  "version": "0.0.0",
+  "description": "maxLength.js - a small jQuery script for accurately limiting the length of textareas (cross browser - fixes maxlength bug in Firefox/IE).\r ==========",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/6eDesign/maxLength.git"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/6eDesign/maxLength/issues"
+  },
+  "devDependencies": {
+    "gulp": "~3.8.1",
+    "gulp-concat": "~2.2.0",
+    "gulp-less": "~1.2.3",
+    "gulp-livereload": "^2.1.0",
+    "gulp-minify-css": "~0.3.5",
+    "gulp-uglify": "~0.3.1",
+    "lodash": ""
+  },
+  "dependencies": {
+    "lodash": ""
+  }
+}

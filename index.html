@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>maxLength.js Demo</title>
+
+	<!-- mobile meta (hooray!) -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+	<!-- Stylesheets: -->
+	<link rel="stylesheet" type="text/css" href="./dist/css/demo.min.css">
+</head>
+<body>
+	<header class="header">
+
+	<div class="container">
+		<h1 class="brand">
+			maxLength.js
+		</h1>
+		<span class="poweredby">powered by</span>
+		<span class="poweredby">6eDesign.net</span>
+	</div>
+		
+	</header>
+
+	<section class="container content">
+		<div class="row">
+			<div class="fourcol first panel">
+				<label for="myTextarea">
+					My Limited Textarea
+					<span class="maxLength" data-textareaid="myTextarea" data-string="#{current}/#{limit}" data-warnclass="warning" data-warnthreshold="40"></span>
+				</label>
+				<textarea id='myTextarea' cols="30" rows="10" maxlength='100'></textarea>
+				<div class="cf"></div>		
+				<span class='maxLength' data-textareaid='myTextarea' data-string='<em>#{left}</em> characters remaining.'>
+				<div class="cf"></div>		
+			</div>
+			<div class="eightcol last" style="min-height: 470px;">
+				<h1 class="subheading">Introducting maxLength</h1>
+				<h4>by 6eDesign.net</h4>
+				<p>
+					A brand new, lightweight, JavaScript plugin for limiting the number of characters in a <strong>&lt;textarea&gt;&lt;/textarea&gt;</strong>'s.
+				</p>
+				<p>
+					I know what you're thinking - there's an HTML property for that!  Yes, but it doesn't work consistently in modern browsers. Webkit properly reports a pair of '\r\n' for each carriage return in the textarea while other browsers interpret these differently.  This plugin aims to accurately count the amount of data within the textarea and prevent extra characters from being entered from the browsers in question.  
+				</p>
+				<p>
+					<strong>maxLength.js</strong> also gives you an easy way to embed <em>Characters Remaining</em> counters to your webpage.  All you will need is a textarea with an ID and a simple HTML snippet that is fully customizeable.  
+				</p>
+				<p>
+					Check out the <a href="https://www.github.com/6eDesign/maxLength">Code &amp; Documentation</a> on my Github page. 
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="twelvecol first">
+				<h3>Basic Usage:</h3>
+				<div class="sevencol first">
+					<p><strong>It's pretty simple:</strong> all you need is a textarea with an ID and a maxlength attribute and an element which you give the class: 'maxLength' and property: data-textareaid='someID'.  There are some basic settings baked right in to get you up and running. </p>
+					<pre style="width: 97%">
+						<code data-language="html">
+<textarea id='myTextarea2' cols="30" rows="10" maxlength='100'></textarea>
+<span class='maxLength' data-textareaid='myTextarea2'></span>
+						</code>
+					</pre>
+					<p class="explanation">(You do not need to include the text within the .maxLength span, the script is simply acting upon the HTML used to generate these docs)</p>
+					
+				</div>
+				<div class="fivecol last">
+					<label for="_myTextarea2">
+						My Textarea
+					</label>
+					<textarea id='_myTextarea2' cols="30" rows="10" maxlength='100'></textarea>
+					<div class="cf"></div>		
+					<span class='maxLength' data-textareaid='_myTextarea2'></span>
+					<div class="cf"></div>		
+				</div>
+				<div class="cf"></div>
+				<hr>
+			</div>	
+
+			<div class="twelvecol first">
+				<h3>Advanced Usage:</h3>
+				<div class="sevencol first">
+					<p>I've added a few data-parameter driven options which you can use to make a unique UX. Here's an example:</p>
+					<pre style="width: 97%">
+						<code data-language="html">
+<label for="myTextarea3">
+	My Fancy Textarea
+</label>
+<span 
+	class="maxLength"
+	data-textareaid="myTextarea3" 
+	data-warnclass="warning" 
+	data-warnthreshold="40"></span>
+<textarea id='myTextarea3' cols="30" rows="10" maxlength='100'></textarea>
+<span class='maxLength' data-textareaid='myTextarea3' data-string="#{current}/#{limit}"></span>
+						</code>
+					</pre>
+					<p class="explanation">(You do not need to include the text within the .maxLength span, the script is simply acting upon the HTML used to generate these docs)</p>
+					<p>
+						You can add multiple <em>Characters Remaining</em> counters, customize their text, and add a 'warning' class to the counter element with a customizeable warning threshold (# characters remaining).  Submit an issue on Github if there's something else you'd like this script to do and I'll think about it.
+					</p>
+					<p>
+						Try adding a couple more letters to the textarea to the right to trigger the warning class.
+					</p>
+				</div>
+				<div class="fivecol last">
+					<label for="_myTextarea3">
+						My Fancy Textarea
+						<span class="maxLength" data-textareaid="_myTextarea3" data-string="#{current}/#{limit}" data-warnclass="warning" data-warnthreshold="40"></span>
+					</label>
+					<textarea id='_myTextarea3' cols="30" rows="10" maxlength='100'>1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23</textarea>
+					<div class="cf"></div>		
+					<span class='maxLength' data-textareaid='_myTextarea3'></span>
+					<div class="cf"></div>		
+				</div>
+				<div class="cf"></div>
+				<hr>
+			</div>	
+		</div>
+		<div class="twelvecol first">
+			<h3>Options/Settings &amp; License</h3>
+			<p>
+				Options are chosen via the data-attributes assigned to your counter element.  The available options are summarized below.  Please let me know if you'd like some additional functionality.
+			</p>
+			<div class="sevencol first">
+				<div id="markdownContainer"></div>
+<textarea id="markdown" style="display:none;">
+Attribute | Description | Example | Default
+--- | --- | --- | ---
+'data-textareaid' | The ID of the textarea which will be limited and reported on. | null | "myTextareaID"
+'data-string' | A simple string or chunk of HTML where you can include #{left}, #{limit}, and #{current} in order to properly format your counter's text. | "#{current}/#{limit}" | '#{left} of #{limit} characters remaining.'
+'data-warnclass' | Include this parameter if you would like to add a special class to character counters when they reach a certain threshold of remaining characters.  The class added will be the string specified in this attribute. | 'mySpecialWarningClass' | false
+'data-warnthreshold' | Specify how many characters you'd like to have remaining when the warning class is added. | "10" | "50"
+</textarea>
+			</div>
+			<div class="fivecol last">
+				<div class="license">
+					<h5>
+						The MIT License (MIT)
+					</h5>
+					
+					<p>
+						Copyright (c) 2013 Jonathan Greenemeier
+					</p>
+					<p>
+						Permission is hereby granted, free of charge, to any person obtaining a copy
+						of this software and associated documentation files (the "Software"), to deal
+						in the Software without restriction, including without limitation the rights
+						to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+						copies of the Software, and to permit persons to whom the Software is
+						furnished to do so, subject to the following conditions:
+					</p>
+					<p>
+						The above copyright notice and this permission notice shall be included in
+						all copies or substantial portions of the Software.
+					</p>
+					
+					<p>
+						THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+						IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+						FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+						AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+						LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+						OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+						THE SOFTWARE.
+					</p>
+					
+				</div>
+			</div>
+		</div>
+		<div class="cf"></div>
+	
+	</section>
+	
+	<!-- JavaScripts: 
+					We are using a minified, concatenated file for the demo.  If you have jQuery in your codebase: all you need is dist/maxLength.min.js.
+					Otherwise, make sure to include your own copy of jQuery or include dist/vendor.min.js. 
+	-->
+	<script type="text/javascript" src="./dist/js/demo.min.js"></script>
+	<!-- /Javascripts -->
+
+</body>
+</html>
+
+
+
+
+
+	
