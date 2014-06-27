@@ -1,29 +1,42 @@
 // some utilities wrapped up in bows: 
 var jDom = (function(exports,w,d,c){
-    /* 
+    /* ================================================
+
         Our Public Functions: 
             
-            UTILITY FUNCTIONS: 
+            1) UTILITY FUNCTIONS: 
             -jDom.extend(object,object,...)
-            -jDon.trim(str,str,str,...,str); 
-            -jDom.getKeys(obj) // for getting Object.keys(obj)    (includes a polyfill of sorts for old browsers)
+            -jDon.trim(str,str,str,...,str)
+            -jDom.getKeys(obj) 
+                for getting Object.keys(obj)    
+                (includes a polyfill of sorts for old browsers)
 
-            DOM EVENTS: 
-            -jDom.ready(function): enqueues loadEvents on domready
-            -jDom.trigger(context,eventType); 
+            2) DOM EVENTS: 
+            -jDom.ready(function)
+                enqueues loadEvents on domready
+            -jDom.trigger(context,eventType)
             
-            DOM MANIPULATION/CREATION: 
-            -jDom.create(String | {}): create a dom node as specified via obj or string
+            3) DOM MANIPULATION/CREATION: 
+            -jDom.create(String | {})
+                create a dom node as specified via obj 
+                (load jDom.interpret for emmet.io-like interpretation)
             
-            DOM GETTERS/SETTERS: 
-            -jDom.getByClassName(classes,context): classes is space separated values, context is an element (not required) 
+            4) DOM GETTERS/SETTERS: 
+            -jDom.getByClassName(classes,context)
+                classes is space separated values
+                context is an element (not required) 
             -jDom.getElementsByData(key,val,context,type);
             -jDom.getData(elem)
-            -jDom.addClass(elem,classes) classes is space separated string
-            -jDom.removeClass(elem,classes) classes is space separated string
-    */
+            -jDom.addClass(elem,classes) 
+                classes is space separated string
+            -jDom.removeClass(elem,classes) 
+                classes is space separated string
 
-    /* UTILITY FUNCTIONS: */
+    ================================================ */
+
+    /*=========================================================
+    |   1) UTILITY FUNCTIONS:                                 |
+    ======================================================== */ 
     exports.extend = function() { 
         /* 
             this extend can handle nested objects & any 
@@ -43,7 +56,9 @@ var jDom = (function(exports,w,d,c){
     }; 
 
 
-    /* DOM EVENTS: */
+    /*=========================================================
+    |   2) DOM EVENTS:                                        |
+    ======================================================== */ 
     exports.on = function(elem,eventType,func) { 
         addEvent(elem,eventType,func); 
         return elem; 
@@ -52,7 +67,10 @@ var jDom = (function(exports,w,d,c){
         return trigger(context,eventType); 
     }; 
 
-    /* DOM MANIPULATION/CREATION: */
+
+    /*=========================================================
+    |   3) DOM MANIPULATION/CREATION:                         |
+    ======================================================== */ 
     exports.ready = function(func) { 
         var oldonload = w.onload;
         if (typeof w.onload != 'function' ) {
@@ -67,7 +85,10 @@ var jDom = (function(exports,w,d,c){
     exports.create = function(obj) {
         return creator(obj);
     };
-    /* DOM GETTERS/SETTERS: */
+
+    /*=========================================================
+    |   4) DOM GETTERS/SETTERS:                               |
+    ======================================================== */ 
     exports.getByClassName = function(str,context) { 
         var elems = [ ]; 
         context = (typeof context == 'undefined') ? d : context; 
@@ -126,31 +147,31 @@ var jDom = (function(exports,w,d,c){
     }; 
 
 
-    /* Our Private Methods: */
-    var extend, trim, getKeys, trigger, addEvent, creator, createElem, getByClassName, getAttrs, getElementsByData, getArrayFromSpaceSeparated, getTypeOfObject; 
-    trim = function(str) { 
-        return str.replace(/^\s+|\s+$/g,''); 
-    }; 
-    getAttrs = function(elem) { 
-        var attrs, obj = {}; 
-        attrs = elem.attributes; 
-        for(var i=0; i < attrs.length; ++i) { 
-            var attr = attrs.item(i); 
-            obj[attr.nodeName] = attr.nodeValue; 
-        }
-        return obj; 
-    }; 
-    getKeys = function(obj) { 
-        if(Object.keys) { 
-            return Object.keys(obj); 
-        } else { 
-            arr = []; 
-            for(var key in obj) { 
-                arr.push(key); 
-            }
-            return arr; 
-        }
-    }; 
+    /* ================================================ 
+        Our Private Methods:
+            1) UTILITY FUNCTIONS: 
+                -extend()
+                -trim()
+                -getKeys()
+                -getArrayFromSpaceSeparated()
+                -isObjectAnArray()
+            2) DOM EVENTS: 
+                -trigger()
+                -addEvent()
+            3) DOM MANIPULATION/CREATION: 
+                -creator()
+                -createElem()
+            4) DOM GETTERS/SETTERS: 
+                -getByClassName()
+                -getElementsByData()
+                -getAttrs()
+    ================================================ */
+
+
+    /*=========================================================
+    |   1) UTILITY FUNCTIONS:                                 |
+    ======================================================== */ 
+    var extend, trim, getKeys, getArrayFromSpaceSeparated, isObjectAnArray; 
     extend = function(args) { 
         for(var i=args.length-1; i > 0; --i) { 
             for(var key in args[i]) { 
@@ -170,6 +191,35 @@ var jDom = (function(exports,w,d,c){
         } 
         return (args.length) ? args[0] : {}; 
     }; 
+    trim = function(str) { 
+        return str.replace(/^\s+|\s+$/g,''); 
+    }; 
+    getKeys = function(obj) { 
+        if(Object.keys) { 
+            return Object.keys(obj); 
+        } else { 
+            arr = []; 
+            for(var key in obj) { 
+                arr.push(key); 
+            }
+            return arr; 
+        }
+    }; 
+    getArrayFromSpaceSeparated = function(str) { 
+        return trim(str).replace(/[ ]+/,' ').split(' ');  
+    }; 
+    isObjectAnArray = function(obj) { 
+        if(Array.isArray) { 
+            return Array.isArray(obj); 
+        } else { 
+            return v instanceof Array; 
+        }
+    }; 
+
+    /*=========================================================
+    |   2) DOM EVENTS:                                        |
+    ======================================================== */ 
+    var trigger, addEvent; 
     trigger = function(context,eventType) { 
         var event; // The custom event that will be created
         if (d.createEvent) {
@@ -189,16 +239,79 @@ var jDom = (function(exports,w,d,c){
         }
         return context;
     }; 
-    isObjectAnArray = function(obj) { 
-        if(Array.isArray) { 
-            return Array.isArray(obj); 
+    addEvent = (function( w, d ) { 
+        if (d.addEventListener) { 
+            return function(elem, type, cb) { 
+                if ((elem && !elem.length) || elem === w) { 
+                    elem.addEventListener(type, cb, false); 
+                } 
+                else if (elem && elem.length) { 
+                    var len = elem.length; 
+                    for (var i = 0; i < len; i++) { 
+                        addEvent(elem[i], type, cb); 
+                    } 
+                } 
+            }; 
+        } else if (d.attachEvent) { 
+            return function (elem, type, cb) { 
+                if ((elem && !elem.length) || elem === w) { 
+                    elem.attachEvent('on' + type, function() { return cb.call(elem, w.event) }); 
+                } 
+                else if (elem.length) { 
+                    var len = elem.length; 
+                    for (var i = 0; i < len; i++) { 
+                        addEvent(elem[i], type, cb); 
+                    } 
+                } 
+            }; 
+        } 
+    })(this, d); 
+
+    /*=========================================================
+    |   3) DOM MANIPULATION/CREATION:                         |
+    ======================================================== */ 
+    var creator, createElem; 
+    creator = function(obj) { 
+        var elem, contains, i, contentsObj, innerElem; 
+        obj.contains = (obj.contains == null) ? [] : obj.contains; 
+        obj.attributes = (obj.attributes == null) ? {} : obj.attributes; 
+        obj.type = (obj.type == null) ? 'div' : obj.type; 
+        
+        elem = createElem(obj.type, obj.attributes); 
+        contains = obj.contains; 
+
+        if(typeof contains == "string") { 
+            elem.appendChild(d.createTextNode(contains)); 
         } else { 
-            return v instanceof Array; 
+            for(i=0; i < contains.length; ++i) {
+                contentsObj = contains[i]; 
+                if(typeof contentsObj == 'object') { 
+                    innerElem = create(contentsObj); 
+                    elem.appendChild(innerElem); 
+                } else { 
+                    elem.appendChild(d.createTextNode(contentsObj)); 
+                }
+            }
         }
+        return elem; 
     }; 
-    getArrayFromSpaceSeparated = function(str) { 
-        return trim(str).replace(/[ ]+/,' ').split(' ');  
-    }; 
+    createElem = function(type, attributes) {
+        var elem, key, val;
+        elem = d.createElement(type);
+        if (typeof attributes !== "undefined") {
+            for (key in attributes) {
+                val = attributes[key];
+                elem.setAttribute(key, val);
+            }
+        }
+        return elem;
+    };
+
+
+    /*=========================================================
+    |   4) DOM GETTERS/SETTERS:                               |
+    ======================================================== */ 
+    var getByClassName, getElementsByData, getAttrs;
     getByClassName = function(str,context) { 
         var candidates, foundElems = []; 
         candidates = context.getElementsByTagName('*'); 
@@ -235,70 +348,15 @@ var jDom = (function(exports,w,d,c){
         }
         return elems; 
     }; 
-    creator = function(obj) { 
-        var elem, contains, i, contentsObj, innerElem; 
-        obj.contains = (obj.contains == null) ? [] : obj.contains; 
-        obj.attributes = (obj.attributes == null) ? {} : obj.attributes; 
-        obj.type = (obj.type == null) ? 'div' : obj.type; 
-        
-        elem = createElem(obj.type, obj.attributes); 
-        contains = obj.contains; 
-
-        if(typeof contains == "string") { 
-            elem.appendChild(d.createTextNode(contains)); 
-        } else { 
-            for(i=0; i < contains.length; ++i) {
-                contentsObj = contains[i]; 
-                if(typeof contentsObj == 'object') { 
-                    innerElem = create(contentsObj); 
-                    elem.appendChild(innerElem); 
-                } else { 
-                    elem.appendChild(d.createTextNode(contentsObj)); 
-                }
-            }
+    getAttrs = function(elem) { 
+        var attrs, obj = {}; 
+        attrs = elem.attributes; 
+        for(var i=0; i < attrs.length; ++i) { 
+            var attr = attrs.item(i); 
+            obj[attr.nodeName] = attr.nodeValue; 
         }
-        return elem; 
+        return obj; 
     }; 
-    createElem = function(type, attributes) {
-        var elem, key, val;
-        elem = d.createElement(type);
-        if (typeof attributes !== "undefined") {
-            for (key in attributes) {
-                val = attributes[key];
-                elem.setAttribute(key, val);
-            }
-        }
-        return elem;
-    };
-    addEvent = (function( w, d ) { 
-        if (d.addEventListener) { 
-            return function(elem, type, cb) { 
-                if ((elem && !elem.length) || elem === w) { 
-                    elem.addEventListener(type, cb, false); 
-                } 
-                else if (elem && elem.length) { 
-                    var len = elem.length; 
-                    for (var i = 0; i < len; i++) { 
-                        addEvent(elem[i], type, cb); 
-                    } 
-                } 
-            }; 
-        } else if (d.attachEvent) { 
-            return function (elem, type, cb) { 
-                if ((elem && !elem.length) || elem === w) { 
-                    elem.attachEvent('on' + type, function() { return cb.call(elem, w.event) }); 
-                } 
-                else if (elem.length) { 
-                    var len = elem.length; 
-                    for (var i = 0; i < len; i++) { 
-                        addEvent(elem[i], type, cb); 
-                    } 
-                } 
-            }; 
-        } 
-    })(this, d); 
-    
-    /*Interpreter removed*/
 
     // return our public functions: 
     return exports; 
