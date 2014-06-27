@@ -23,6 +23,7 @@ var dist = {
   outfile: 'maxLength.min.js',
   files: [
     input + 'js/jDom.js',
+    input + 'js/jDom.interpret.js',
     input + 'js/maxLength.js'
   ]
 };
@@ -39,27 +40,6 @@ gulp.task('scripts:dist', function() {
     .pipe(livereload());
 });
 
-// 
-// VENDOR PATHS
-// 
-var vendor = {
-  outfile: 'vendor.min.js',
-  files: [
-    input + 'js/jquery.min.js'
-  ]
-};
-
-//
-// VENDOR TASK
-//
-
-gulp.task('scripts:vendor', function() {
-  return gulp.src(vendor.files)
-    .pipe(uglify())
-    .pipe(concat(vendor.outfile))
-    .pipe(gulp.dest(output + 'js/'))
-    .pipe(livereload());
-});
 
 //
 // Demo JS: 
@@ -69,8 +49,7 @@ var demoJS = {
   files: [
     // input + 'js/jquery.min.js', 
     input + 'js/markdown.min.js', 
-    input + 'js/jDom.js', 
-    input + 'js/maxLength.js', 
+    output + 'js/maxLength.min.js', 
     input + 'js/rainbow-custom.min.js', 
     input + 'js/demo.js'
   ]
@@ -128,7 +107,6 @@ gulp.task('html', function(){
 gulp.task('watch', function() {
   gulp.watch(dist.files, ['scripts:dist']);
   gulp.watch(dist.files, ['scripts:demo']);
-  gulp.watch(vendor.files, ['scripts:vendor']);
   gulp.watch(demoCSS.files, ['stylesheet:demo']);
   gulp.watch('*.html', ['html']); 
 });
@@ -137,6 +115,6 @@ gulp.task('watch', function() {
 // TASK ALIAS'
 //
 
-gulp.task('js', ['scripts:dist', 'scripts:vendor', 'scripts:demo']);
+gulp.task('js', ['scripts:dist', 'scripts:demo']);
 gulp.task('less', ['stylesheet:demo']);
-gulp.task('uber', ['scripts:dist', 'scripts:vendor', 'scripts:demo', 'stylesheet:demo', 'watch']);
+gulp.task('uber', ['scripts:dist', 'scripts:demo', 'stylesheet:demo', 'watch']);

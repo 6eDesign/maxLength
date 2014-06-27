@@ -1,6 +1,6 @@
 // some utilities wrapped up in bows: 
-var jDom = (function(w,d,c){
-    var trim, extend, getAttrs, getKeys, getTypeOfObject, getByClassName, getWithData, addEvent, getArrayFromSpaceSeparated, creator, createElem, exports = {};  
+var jDom = (function(exports,w,d,c){
+    var trim, extend, getAttrs, getKeys, getTypeOfObject, getByClassName, getWithData, addEvent, getArrayFromSpaceSeparated, creator, createElem;  
 
     /* 
         Our Public Functions: 
@@ -127,11 +127,7 @@ var jDom = (function(w,d,c){
     }; 
 
     exports.create = function(obj) {
-        if(typeof obj=='string') { 
-            return creator(interpreter(obj)); 
-        } else { 
-            return creator(obj);
-        }
+        return creator(obj);
     };
 
     /* Our Private Methods: */
@@ -300,4 +296,4 @@ var jDom = (function(w,d,c){
 
     // return our public functions: 
     return exports; 
-})(window,document,console); 
+})(jDom || {}, window,document,console); 
