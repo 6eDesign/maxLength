@@ -44,6 +44,7 @@ gulp.task('scripts:dist', function() {
 //
 // Demo JS: 
 //
+
 var demoJS = { 
   outfile: 'demo.min.js',
   files: [
@@ -93,6 +94,7 @@ gulp.task('stylesheet:demo', function () {
 //
 // HTML Task
 //
+
 gulp.task('html', function(){
   return gulp.src('*.html')
   .pipe(gulp.dest(''))

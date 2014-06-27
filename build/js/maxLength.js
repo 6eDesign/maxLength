@@ -66,13 +66,10 @@ var maxLength = (function(w,d,c,$){
                 $.on(state[opts.textareaid].input,'keyup',updateTextarea); 
                 $.on(state[opts.textareaid].input,'paste',updateTextarea); 
                 $.on(state[opts.textareaid].input,'cut',updateTextarea); 
-                // state[opts.textareaid].input.onkeyup = updateTextarea; 
-                // state[opts.textareaid].input.onpaste = updateTextarea; 
-                // state[opts.textareaid].input.oncut = updateTextarea; 
             }
             state[opts.textareaid].counters.push({ opts: opts, el: counterElems[i]}); 
         }; 
-        var textareas = jDom.getWithData('lengthmonitored','true',d,'textarea');         
+        var textareas = jDom.getElementsByData('lengthmonitored','true',d,'textarea');         
         for(var i=0; i < textareas.length; ++i) { 
             jDom.trigger(textareas[i],'keyup'); 
         }

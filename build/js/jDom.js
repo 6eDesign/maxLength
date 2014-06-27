@@ -1,58 +1,88 @@
 // some utilities wrapped up in bows: 
 var jDom = (function(exports,w,d,c){
-    var trim, extend, getAttrs, getKeys, getTypeOfObject, getByClassName, getWithData, addEvent, getArrayFromSpaceSeparated, creator, createElem;  
-
     /* 
         Our Public Functions: 
-            -jDom.create(String | {}): create a dom node as specified via obj or string
-            -jDom.getByClassName(classes,context): classes is space separated values, context is an element (not required) 
-            -jDom.ready(function): enqueues loadEvents on domready
+            
+            UTILITY FUNCTIONS: 
             -jDom.extend(object,object,...)
+            -jDon.trim(str,str,str,...,str); 
+            -jDom.getKeys(obj) // for getting Object.keys(obj)    (includes a polyfill of sorts for old browsers)
+
+            DOM EVENTS: 
+            -jDom.ready(function): enqueues loadEvents on domready
+            -jDom.trigger(context,eventType); 
+            
+            DOM MANIPULATION/CREATION: 
+            -jDom.create(String | {}): create a dom node as specified via obj or string
+            
+            DOM GETTERS/SETTERS: 
+            -jDom.getByClassName(classes,context): classes is space separated values, context is an element (not required) 
+            -jDom.getElementsByData(key,val,context,type);
             -jDom.getData(elem)
-            -jDom.getKeys(obj)
             -jDom.addClass(elem,classes) classes is space separated string
             -jDom.removeClass(elem,classes) classes is space separated string
-            -jDom.getWithData(key,val,context,type);
-            -jDom.trigger(context,eventType); 
     */
 
-    exports.on = function(elem,eventType,func) { 
-        addEvent(elem,eventType,func); 
-        return elem; 
-    }; 
-
-    exports.trigger = function(context,eventType) { 
-        var event; // The custom event that will be created
-        if (d.createEvent) {
-            event = d.createEvent("HTMLEvents");
-            event.initEvent(eventType, true, true);
-        } else {
-            event = d.createEventObject();
-            event.eventType = eventType;
-        }
-
-        event.eventName = eventType;
-
-        if (d.createEvent) {
-            context.dispatchEvent(event);
-        } else {
-            context.fireEvent("on" + event.eventType, event);
-        }
-        return context;
-    }; 
-
+    /* UTILITY FUNCTIONS: */
     exports.extend = function() { 
         /* 
             this extend can handle nested objects & any 
             number of objects passed as arguments
         */
         return extend(arguments); 
-    }
-
+    }; 
+    exports.trim = function() { 
+        var results = []; 
+        for(var i=0; i < arguments.length; ++i) { 
+            results.push(trim(arguments[i])); 
+        }
+        return results; 
+    }; 
     exports.getKeys = function(obj) { 
         return getKeys(obj); 
     }; 
 
+
+    /* DOM EVENTS: */
+    exports.on = function(elem,eventType,func) { 
+        addEvent(elem,eventType,func); 
+        return elem; 
+    }; 
+    exports.trigger = function(context,eventType) { 
+        return trigger(context,eventType); 
+    }; 
+
+    /* DOM MANIPULATION/CREATION: */
+    exports.ready = function(func) { 
+        var oldonload = w.onload;
+        if (typeof w.onload != 'function' ) {
+            w.onload = func;
+        } else {
+            w.onload = function() {
+                oldonload();
+                func();
+            }
+        }
+    }; 
+    exports.create = function(obj) {
+        return creator(obj);
+    };
+    /* DOM GETTERS/SETTERS: */
+    exports.getByClassName = function(str,context) { 
+        var elems = [ ]; 
+        context = (typeof context == 'undefined') ? d : context; 
+        if(d.getElementsByClassName) { 
+            return elems = context.getElementsByClassName(str); 
+        } else { 
+            return getByClassName(str,context); 
+        }
+    }; 
+    exports.getElementsByData = function(key,val,context,type) { 
+        val = (typeof val == 'undefined') ? null : val; 
+        context = (typeof context == 'undefined') ? d : context; 
+        type = (typeof type == 'undefined') ? '*' : type; 
+        return getElementsByData(key,val,context,type); 
+    }; 
     exports.getData = function(elem) { 
         var attrs, keys, data = { }; 
         attrs = getAttrs(elem); 
@@ -64,14 +94,6 @@ var jDom = (function(exports,w,d,c){
         }
         return data; 
     }; 
-
-    exports.getWithData = function(key,val,context,type) { 
-        val = (typeof val == 'undefined') ? null : val; 
-        context = (typeof context == 'undefined') ? d : context; 
-        type = (typeof type == 'undefined') ? '*' : type; 
-        return getWithData(key,val,context,type); 
-    }; 
-
     exports.addClass = function(elem,classes) { 
         var currentClasses; 
         currentClasses = ' ' + getArrayFromSpaceSeparated(elem.className).join(' ') + ' '; 
@@ -84,7 +106,6 @@ var jDom = (function(exports,w,d,c){
         elem.className = trim(currentClasses); 
         return elem; 
     }; 
-
     exports.removeClass = function(elem,classes) { 
         var current, numRemovedInner, numRemoved = 0;
         classes = getArrayFromSpaceSeparated(classes); 
@@ -104,37 +125,12 @@ var jDom = (function(exports,w,d,c){
         return elem; 
     }; 
 
-    exports.ready = function(func) { 
-        var oldonload = window.onload;
-        if (typeof window.onload != 'function' ) {
-            window.onload = func;
-        } else {
-            window.onload = function() {
-                oldonload();
-                func();
-            }
-        }
-    }; 
-
-    exports.getByClassName = function(str,context) { 
-        var elems = [ ]; 
-        context = (typeof context == 'undefined') ? d : context; 
-        if(d.getElementsByClassName) { 
-            return elems = context.getElementsByClassName(str); 
-        } else { 
-            return getByClassName(str,context); 
-        }
-    }; 
-
-    exports.create = function(obj) {
-        return creator(obj);
-    };
 
     /* Our Private Methods: */
+    var extend, trim, getKeys, trigger, addEvent, creator, createElem, getByClassName, getAttrs, getElementsByData, getArrayFromSpaceSeparated, getTypeOfObject; 
     trim = function(str) { 
         return str.replace(/^\s+|\s+$/g,''); 
     }; 
-
     getAttrs = function(elem) { 
         var attrs, obj = {}; 
         attrs = elem.attributes; 
@@ -144,7 +140,6 @@ var jDom = (function(exports,w,d,c){
         }
         return obj; 
     }; 
-
     getKeys = function(obj) { 
         if(Object.keys) { 
             return Object.keys(obj); 
@@ -156,7 +151,6 @@ var jDom = (function(exports,w,d,c){
             return arr; 
         }
     }; 
-
     extend = function(args) { 
         for(var i=args.length-1; i > 0; --i) { 
             for(var key in args[i]) { 
@@ -176,7 +170,25 @@ var jDom = (function(exports,w,d,c){
         } 
         return (args.length) ? args[0] : {}; 
     }; 
+    trigger = function(context,eventType) { 
+        var event; // The custom event that will be created
+        if (d.createEvent) {
+            event = d.createEvent("HTMLEvents");
+            event.initEvent(eventType, true, true);
+        } else {
+            event = d.createEventObject();
+            event.eventType = eventType;
+        }
 
+        event.eventName = eventType;
+
+        if (d.createEvent) {
+            context.dispatchEvent(event);
+        } else {
+            context.fireEvent("on" + event.eventType, event);
+        }
+        return context;
+    }; 
     isObjectAnArray = function(obj) { 
         if(Array.isArray) { 
             return Array.isArray(obj); 
@@ -184,11 +196,9 @@ var jDom = (function(exports,w,d,c){
             return v instanceof Array; 
         }
     }; 
-
     getArrayFromSpaceSeparated = function(str) { 
         return trim(str).replace(/[ ]+/,' ').split(' ');  
     }; 
-
     getByClassName = function(str,context) { 
         var candidates, foundElems = []; 
         candidates = context.getElementsByTagName('*'); 
@@ -209,8 +219,7 @@ var jDom = (function(exports,w,d,c){
         }
         return foundElems; 
     }; 
-
-    getWithData = function(key,val,context,type) { 
+    getElementsByData = function(key,val,context,type) { 
         var candidates, elems = []; 
         candidates = context.getElementsByTagName(type); 
         for(var i=0; i < candidates.length; ++i) { 
@@ -226,7 +235,6 @@ var jDom = (function(exports,w,d,c){
         }
         return elems; 
     }; 
-
     creator = function(obj) { 
         var elem, contains, i, contentsObj, innerElem; 
         obj.contains = (obj.contains == null) ? [] : obj.contains; 
@@ -251,7 +259,6 @@ var jDom = (function(exports,w,d,c){
         }
         return elem; 
     }; 
-
     createElem = function(type, attributes) {
         var elem, key, val;
         elem = d.createElement(type);
@@ -263,7 +270,6 @@ var jDom = (function(exports,w,d,c){
         }
         return elem;
     };
-
     addEvent = (function( w, d ) { 
         if (d.addEventListener) { 
             return function(elem, type, cb) { 
