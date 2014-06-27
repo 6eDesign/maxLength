@@ -22,6 +22,7 @@ var output = 'dist/';
 var dist = {
   outfile: 'maxLength.min.js',
   files: [
+    input + 'js/jDom.js',
     input + 'js/maxLength.js'
   ]
 };
@@ -66,8 +67,9 @@ gulp.task('scripts:vendor', function() {
 var demoJS = { 
   outfile: 'demo.min.js',
   files: [
-    input + 'js/jquery.min.js', 
+    // input + 'js/jquery.min.js', 
     input + 'js/markdown.min.js', 
+    input + 'js/jDom.js', 
     input + 'js/maxLength.js', 
     input + 'js/rainbow-custom.min.js', 
     input + 'js/demo.js'
@@ -80,7 +82,7 @@ var demoJS = {
 
 gulp.task('scripts:demo', function(){
   return gulp.src(demoJS.files)
-    .pipe(uglify())
+    // .pipe(uglify())
     .pipe(concat(demoJS.outfile))
     .pipe(gulp.dest(output+'js/'))
     .pipe(livereload())

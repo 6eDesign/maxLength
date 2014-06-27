@@ -12,11 +12,13 @@
 	<link rel="stylesheet" type="text/css" href="./dist/css/demo.min.css">
 </head>
 <body>
+	<div id="grabme" data-attrone="hello" data-attrtwo="world" data-attrthree="face" class="one two three"></div>
+
 	<header class="header">
 
 	<div class="container">
 		<h1 class="brand">
-			maxLength.js
+			maxLength.js 
 		</h1>
 		<span class="poweredby">powered by</span>
 		<span class="poweredby">6eDesign.net</span>
@@ -31,7 +33,7 @@
 					My Limited Textarea
 					<span class="maxLength" data-textareaid="myTextarea" data-string="#{current}/#{limit}" data-warnclass="warning" data-warnthreshold="40"></span>
 				</label>
-				<textarea id='myTextarea' cols="30" rows="10" maxlength='100'></textarea>
+				<textarea id='myTextarea' cols="30" rows="10" max-length='100' maxlength='100'></textarea>
 				<div class="cf"></div>		
 				<span class='maxLength' data-textareaid='myTextarea' data-string='<em>#{left}</em> characters remaining.'></span>
 				<div class="cf"></div>		
@@ -60,7 +62,7 @@
 					<p><strong>It's pretty simple:</strong> all you need is a textarea with an ID and a maxlength attribute and an element which you give the class: 'maxLength' and property: data-textareaid='someID'.  There are some basic settings baked right in to get you up and running. </p>
 					<pre style="width: 97%">
 						<code data-language="html">
-<textarea id='myTextarea2' cols="30" rows="10" maxlength='100'></textarea>
+<textarea id='myTextarea2' cols="30" rows="10" max-length='100' maxlength='100'></textarea>
 <span class='maxLength' data-textareaid='myTextarea2'></span>
 						</code>
 					</pre>
@@ -71,7 +73,7 @@
 					<label for="_myTextarea2">
 						My Textarea
 					</label>
-					<textarea id='_myTextarea2' cols="30" rows="10" maxlength='100'></textarea>
+					<textarea id='_myTextarea2' cols="30" rows="10" max-length='100' maxlength='100'></textarea>
 					<div class="cf"></div>		
 					<span class='maxLength' data-textareaid='_myTextarea2'></span>
 					<div class="cf"></div>		
@@ -94,7 +96,7 @@
 	data-textareaid="myTextarea3" 
 	data-warnclass="warning" 
 	data-warnthreshold="40"></span>
-<textarea id='myTextarea3' cols="30" rows="10" maxlength='100'></textarea>
+<textarea id='myTextarea3' cols="30" rows="10" max-length='100' maxlength='100'></textarea>
 <span class='maxLength' data-textareaid='myTextarea3' data-string="#{current}/#{limit}"></span>
 						</code>
 					</pre>
@@ -111,7 +113,7 @@
 						My Fancy Textarea
 						<span class="maxLength" data-textareaid="_myTextarea3" data-string="#{current}/#{limit}" data-warnclass="warning" data-warnthreshold="40"></span>
 					</label>
-					<textarea id='_myTextarea3' cols="30" rows="10" maxlength='100'>1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23</textarea>
+					<textarea id='_myTextarea3' cols="30" rows="10" max-length='100' maxlength='100'>1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23</textarea>
 					<div class="cf"></div>		
 					<span class='maxLength' data-textareaid='_myTextarea3'></span>
 					<div class="cf"></div>		
@@ -127,7 +129,7 @@
 			</p>
 			<div class="sevencol first">
 				<div id="markdownContainer"></div>
-<textarea id="myMarkdown" name="myMarkdown" style="display:none;">
+<textarea id="markdown" name="markdown" style="display:none;">
 Attribute | Description | Example | Default
 --- | --- | --- | ---
 'data-textareaid' | The ID of the textarea which will be limited and reported on. | null | "myTextareaID"

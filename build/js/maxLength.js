@@ -34,9 +34,9 @@ var maxLength = (function(w,d,c,$){
                 state[id].counters[i].el.innerHTML = getString(state[id].counters[i].opts.string, data); 
                 if(state[id].counters[i].opts.warnclass != false) { 
                     if(data.left <= state[id].counters[i].opts.warnthreshold) { 
-                        $(state[id].counters[i].el).addClass(state[id].counters[i].opts.warnclass); 
+                        $.addClass(state[id].counters[i].el, state[id].counters[i].opts.warnclass); 
                     } else { 
-                        $(state[id].counters[i].el).removeClass(state[id].counters[i].opts.warnclass); 
+                        $.removeClass(state[id].counters[i].el, state[id].counters[i].opts.warnclass); 
                     }
                 }
             }
@@ -45,29 +45,37 @@ var maxLength = (function(w,d,c,$){
     init = function() { 
         /*
             Looks for: 
-                <textarea id='myTextarea' maxlength='650'/>
+                <textarea id='myTextarea' maxlength='650'><textarea/>
                 <span class='maxLength' data-textareaid='myTextarea' data-string='#{left} of #{limit} characters remaining.'>
                 </span>
         */
-        $('.maxLength').each(function(){
-            var id, opts = $.extend({},settings,$(this).data()); 
+        var counterElems = jDom.getByClassName('maxLength'); 
+        for(var i=0; i < counterElems.length; ++i) { 
+            var id, opts = $.extend({},settings,$.getData(counterElems[i])); 
             if(typeof state[opts.textareaid] == 'undefined') { 
-                var input = d.getElementById(opts.textareaid); 
+                var input, max; 
+                input = d.getElementById(opts.textareaid); 
+                max = (input.getAttribute('maxlength')) ? input.getAttribute('maxlength') : input.getAttribute('max-length'); 
                 input.setAttribute('data-lengthmonitored','true'); 
                 state[opts.textareaid] = { 
                     input: input, 
-                    limit: parseInt(input.getAttribute('maxlength')), 
+                    limit: parseInt(max), 
                     current: -1, 
                     counters: [] 
                 };
-                $(state[opts.textareaid].input).on('keyup',updateTextarea);
-                $(state[opts.textareaid].input).on('paste cut',function(){
-                    window.setTimeout(function(){ $('textarea[data-lengthmonitored]').trigger('keyup'); },0)
-                }); 
+                $.on(state[opts.textareaid].input,'keyup',updateTextarea); 
+                $.on(state[opts.textareaid].input,'paste',updateTextarea); 
+                $.on(state[opts.textareaid].input,'cut',updateTextarea); 
+                // state[opts.textareaid].input.onkeyup = updateTextarea; 
+                // state[opts.textareaid].input.onpaste = updateTextarea; 
+                // state[opts.textareaid].input.oncut = updateTextarea; 
             }
-            state[opts.textareaid].counters.push({ opts: opts, el: this}); 
-        });
-        $("textarea[data-lengthmonitored]").trigger('keyup'); 
+            state[opts.textareaid].counters.push({ opts: opts, el: counterElems[i]}); 
+        }; 
+        var textareas = jDom.getWithData('lengthmonitored','true',d,'textarea');         
+        for(var i=0; i < textareas.length; ++i) { 
+            jDom.trigger(textareas[i],'keyup'); 
+        }
     }; 
-    $(d).ready(init); 
-})(window,document,console,jQuery); 
+    $.ready(init); 
+})(window,document,console,jDom); 
