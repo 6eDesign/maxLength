@@ -50,7 +50,7 @@ var jDom = (function(exports,w,d,c){
         for(var i=0; i < arguments.length; ++i) { 
             results.push(trim(arguments[i])); 
         }
-        return results; 
+        return (results.length > 1) ? results : results[0]; 
     }; 
     exports.getKeys = function(obj) { 
         return getKeys(obj); 
@@ -124,15 +124,19 @@ var jDom = (function(exports,w,d,c){
         return data; 
     }; 
     exports.addClass = function(elem,classes) { 
-        var currentClasses; 
-        currentClasses = ' ' + getArrayFromSpaceSeparated(elem.className).join(' ') + ' '; 
-        classes = getArrayFromSpaceSeparated(classes); 
-        for(var i=0; i < classes.length; ++i) { 
-            if(currentClasses.indexOf(' ' + classes[i] + ' ') < 0) { 
-                currentClasses += classes[i] + ' '; 
+        var currentClasses = ""; 
+        if(typeof elem.className != 'undefined') { 
+            currentClasses = ' ' + getArrayFromSpaceSeparated(elem.className).join(' ') + ' '; 
+            classes = getArrayFromSpaceSeparated(classes); 
+            for(var i=0; i < classes.length; ++i) { 
+                if(currentClasses.indexOf(' ' + classes[i] + ' ') < 0) { 
+                    currentClasses += classes[i] + ' '; 
+                }
             }
+            elem.className = trim(currentClasses); 
+        } else { 
+            elem.className = trim(classes); 
         }
-        elem.className = trim(currentClasses); 
         return elem; 
     }; 
     exports.removeClass = function(elem,classes) { 

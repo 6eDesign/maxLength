@@ -20,8 +20,8 @@
 		<h1 class="brand">
 			maxLength.js 
 		</h1>
-		<span class="poweredby">powered by</span>
-		<span class="poweredby">6eDesign.net</span>
+		<span class="poweredby first">powered by</span>
+		<span class="poweredby second">6eDesign.net</span>
 	</div>
 		
 	</header>
@@ -39,19 +39,23 @@
 				<div class="cf"></div>		
 			</div>
 			<div class="eightcol last" style="min-height: 470px;">
-				<h1 class="subheading">Introducting maxLength</h1>
+				<h1 class="subheading">Introducing maxLength</h1>
 				<h4>by 6eDesign.net</h4>
 				<p>
-					A brand new, lightweight, JavaScript plugin for limiting the number of characters in a <strong>&lt;textarea&gt;&lt;/textarea&gt;</strong>'s.
+					A brand new, lightweight, JavaScript plugin for limiting the number of characters in a <strong>&lt;textarea&gt;&lt;/textarea&gt;</strong>.
 				</p>
 				<p>
-					I know what you're thinking - there's an HTML property for that!  Yes, but it doesn't work consistently in modern browsers. Webkit properly reports a pair of '\r\n' for each carriage return in the textarea while other browsers interpret these differently.  This plugin aims to accurately count the amount of data within the textarea and prevent extra characters from being entered from the browsers in question.  
+					I know what you're thinking - there's an HTML property for that!  Yes, but it doesn't work consistently in modern browsers. Webkit properly reports a pair of '\r\n' for each carriage return in the textarea while other browsers interpret these differently.  This plugin aims to accurately quantify the amount of data within a given textarea and prevent extra characters from being entered from the browsers in question, while also enforcing maxlength in older browsers (by including a max-length property in addition to maxlength: tested in IE5 - IE11, Chrome, Firefox).   
 				</p>
 				<p>
 					<strong>maxLength.js</strong> also gives you an easy way to embed <em>Characters Remaining</em> counters to your webpage.  All you will need is a textarea with an ID and a simple HTML snippet that is fully customizeable.  
 				</p>
 				<p>
 					Check out the <a href="https://www.github.com/6eDesign/maxLength">Code &amp; Documentation</a> on my Github page. 
+				</p>
+				<p class="announcement">
+					Announcement: all external dependencies have been removed from maxLength.js.  maxLength.js is ~2.38KB gzipped and comes with an awesome set of utility functions: jDom.js.
+				</p>
 			</div>
 		</div>
 
