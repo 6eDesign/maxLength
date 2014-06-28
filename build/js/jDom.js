@@ -10,6 +10,7 @@ var jDom = (function(exports,w,d,c){
             -jDom.getKeys(obj) 
                 for getting Object.keys(obj)    
                 (includes a polyfill of sorts for old browsers)
+            -isArray(testObj)
 
             2) DOM EVENTS: 
             -jDom.ready(function)
@@ -53,6 +54,13 @@ var jDom = (function(exports,w,d,c){
     }; 
     exports.getKeys = function(obj) { 
         return getKeys(obj); 
+    }; 
+    exports.isArray = function(testObj) { 
+        if(typeof testObj == 'object') { 
+            return isObjectAnArray(testObj); 
+        } else { 
+            return false; 
+        }
     }; 
 
 
